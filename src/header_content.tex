@@ -1,0 +1,18 @@
+% Header setup for all pages
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[L]{\textkhmer{សាន សុធា}}
+\fancyhead[R]{\thepage}
+\renewcommand{\headrulewidth}{0.4pt}
+
+% Ensure the "plain" style (used by title/section pages) matches our header
+\fancypagestyle{plain}{%
+    \fancyhf{}
+    \fancyhead[L]{\textkhmer{សាន សុធា}}
+    \fancyhead[R]{\thepage}
+    \renewcommand{\headrulewidth}{0.4pt}
+}
+
+% Wrap Khmer text with \textkhmer{...} to ensure correct shaping
+\title{\textkhmer{គណិតវិទ្យាថ្នាក់ទី ៧៖ មេរៀនទី ១ --- ចំនួនគត់ធម្មជាតិ}}
+

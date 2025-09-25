@@ -1,0 +1,75 @@
+% Ensure correct engine (XeLaTeX/LuaLaTeX) before loading fontspec/polyglossia
+\usepackage{iftex}
+\ifPDFTeX
+  \errmessage{This document must be compiled with XeLaTeX or LuaLaTeX (not pdfLaTeX).}
+\fi
+% Switch to Unicode-aware engine: use fontspec + polyglossia (not inputenc)
+\usepackage{fontspec}
+\usepackage{polyglossia}
+\setdefaultlanguage{khmer}
+\setotherlanguage{english}
+
+% Prefer a locally bundled Google "Battambang" font if present in ./fonts or ./src/fonts
+% Place Battambang-Regular.ttf, Battambang-Bold.ttf, Battambang-Italic.ttf (optional) in one of those folders
+\newif\iflocalkhmerfont
+\def\KHMERFONTPATH{}
+\IfFileExists{fonts/Battambang-Regular.ttf}{\def\KHMERFONTPATH{fonts/}\localkhmerfonttrue}{\localkhmerfontfalse}
+\IfFileExists{src/fonts/Battambang-Regular.ttf}{\def\KHMERFONTPATH{src/fonts/}\localkhmerfonttrue}{}
+\iflocalkhmerfont
+  \newfontfamily\khmerfont
+    [Path=\KHMERFONTPATH,
+     UprightFont=Battambang-Regular.ttf,
+     BoldFont=Battambang-Bold.ttf,
+     ItalicFont=Battambang-Italic.ttf,
+     Script=Khmer,Language=Khmer,Renderer=HarfBuzz]{Battambang}
+\else
+  % Otherwise, prefer system-installed fonts (Battambang → Noto Sans Khmer → Khmer MN → Khmer Sangam MN → FreeSerif)
+  \IfFontExistsTF{Battambang}{%
+    \newfontfamily\khmerfont{Battambang}[Script=Khmer,Language=Khmer,Renderer=HarfBuzz]
+  }{%
+    \IfFontExistsTF{Noto Sans Khmer}{%
+      \newfontfamily\khmerfont{Noto Sans Khmer}[Script=Khmer,Language=Khmer,Renderer=HarfBuzz]
+    }{%
+      \IfFontExistsTF{Khmer MN}{%
+        \newfontfamily\khmerfont{Khmer MN}[Script=Khmer,Language=Khmer,Renderer=HarfBuzz]
+      }{%
+        \IfFontExistsTF{Khmer Sangam MN}{%
+          \newfontfamily\khmerfont{Khmer Sangam MN}[Script=Khmer,Language=Khmer,Renderer=HarfBuzz]
+        }{%
+          \newfontfamily\khmerfont{FreeSerif}[Script=Khmer,Language=Khmer,Renderer=HarfBuzz]
+        }%
+      }%
+    }%
+  }
+\fi
+
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{amsfonts}
+\usepackage{graphicx}
+\usepackage{tikz}
+\usepackage{hyperref}
+\usepackage[a4paper,margin=1.5cm]{geometry} % Improved margins for A4
+\usepackage{fancyhdr} % For custom headers
+\usepackage{multicol}
+\usepackage{enumitem} % Better control over lists
+\usepackage{amsthm}
+\usepackage[theorems]{tcolorbox}
+
+\newtcolorbox{example}[1]{
+    colback=blue!5!white,
+    colframe=blue!75!black,
+    fonttitle=\bfseries,
+    title=\textkhmer{ឧទាហរណ៍៖} #1
+}
+
+\newenvironment{solution}{
+    \begin{tcolorbox}[
+        colback=green!5!white,
+        colframe=green!75!black,
+        fonttitle=\bfseries,
+        title=\textkhmer{ចម្លើយ}
+    ]
+}{
+    \end{tcolorbox}
+}
